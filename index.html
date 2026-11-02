@@ -1440,7 +1440,28 @@ body,button,input,select,p,.collection-eyebrow,.campaign-kicker,.promise-label,.
  .festival-edit .festival-label{justify-content:center;text-align:center;padding-inline:0}
  .cro-guide .cro-gift-card>span{justify-content:center;text-align:center}
 }
-.site{padding-top:0!important}</style>
+.site{padding-top:0!important}
+dialog:has(.qv){width:min(880px,calc(100% - 28px));max-height:92dvh;padding:28px 28px 24px}
+.qv{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:32px;align-items:center}
+.qv .detail-art{display:block;width:100%;aspect-ratio:1;max-height:none;border-radius:16px;overflow:hidden;box-shadow:0 10px 30px #7a0a3a26}
+.qv .detail-art img{width:100%;height:100%;object-fit:cover;display:block}
+.qv-mood{font:600 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:#b5154f}
+.qv .detail-price{font-size:34px;margin:12px 0 0;color:var(--wine)}
+.qv-tax{font:12px var(--sans);color:#7d626c;margin:0}
+.qv-actions{flex-direction:column;gap:10px;margin-top:24px}
+.qv-actions button{width:100%;min-height:50px;font:600 14px var(--sans);letter-spacing:.04em;border-radius:30px;transition:transform .15s,background .2s}
+.qv-actions button:active{transform:scale(.98)}
+.qv-secondary{background:transparent!important;color:var(--pink)!important;border:1.5px solid var(--pink)}
+.qv-note{font-size:11.5px;margin:20px 0 0}
+@media (max-width:700px){
+dialog:has(.qv){padding:16px 16px 18px;max-height:94dvh}
+.qv{grid-template-columns:1fr;gap:16px}
+.qv .detail-art{aspect-ratio:4/3;max-height:42dvh}
+.qv .detail-price{font-size:28px;margin-top:8px}
+.qv-actions{margin-top:16px}
+.qv-note{margin-top:14px}
+}
+</style>
 </head>
 <body>
 <div class="mia-preloader" id="mia-preloader" role="status" aria-label="Mia is lighting up your Diwali. Loading the collection.">
@@ -1698,7 +1719,7 @@ function updateCounts(){for(const [key,id] of [['wish','wish-count'],['bag','bag
 function openDialog(title,body){document.querySelector('#dialog-title').textContent=title;content.innerHTML=body;if(!dialog.open)dialog.showModal()}
 let toastTimer;
 function toast(message){const el=document.querySelector('#toast');el.textContent=message;el.classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('visible'),3500)}
-function detail(id){const p=byId(id);if(!p)return;openDialog(p.name,`${art(p.crop,p.name,'detail-art')}<p class="detail-price">${currency(p.price)}</p><div class="dialog-actions"><button data-add="${id}">Add to bag</button><button data-save="${id}">${state.wish.includes(id)?'Remove from wishlist':'Save to wishlist'}</button></div><p class="dialog-note">Design preview. Product names, prices and offers reproduce the supplied mockup; these are not a verified live Mia catalogue. Bag and wishlist are stored on this device. No payment is taken.</p>`)}
+function detail(id){const p=byId(id);if(!p)return;openDialog(p.name,`<div class="qv">${art(p.crop,p.name,'detail-art')}<div class="qv-info"><span class="qv-mood">${p.mood} · Lightscapes by Mia</span><p class="detail-price">${currency(p.price)}</p><div class="dialog-actions qv-actions"><button class="qv-primary" data-add="${id}">Add to bag</button><button class="qv-secondary" data-save="${id}">${state.wish.includes(id)?'Remove from wishlist':'Save to wishlist'}</button></div><p class="dialog-note qv-note">Design preview — products and prices are not a live Mia catalogue. Bag and wishlist stay on this device; no payment is taken.</p></div></div>`)}
 function list(items,kind){return `<div class="dialog-list">${items.map((p,i)=>`<div class="dialog-item">${kind==='bag'&&bundleAssets[p.id]?`<span class="product-art"><img src="${bundleAssets[p.id]}" alt="${p.name}" style="width:100%;height:100%;object-fit:contain"></span>`:art(p.crop,p.name)}<div><h3>${p.name}</h3><p>${currency(p.price)}</p>${kind==='bag'&&bundleSizes.includes(state.bagVariants[i])?`<p>Ring size: ${state.bagVariants[i]}</p>`:''}<button data-product="${p.id}">View details</button></div>${kind?`<button data-remove="${p.id}" data-kind="${kind}" data-index="${i}" aria-label="Remove ${p.name}">×</button>`:''}</div>`).join('')}</div>`}
 function collection(title,items){openDialog(title,list(items))}
 function showBag(){const items=state.bag.map(byId);openDialog('Your bag',items.length?list(items,'bag')+`<p class="detail-price">Total ${currency(items.reduce((a,p)=>a+p.price,0))}</p><p class="dialog-note">Preview bag only. Checkout is not connected; no order or payment will be placed.</p>`:'<p>Your bag is empty. Select a piece to see its details and add it here.</p><div class="dialog-actions"><button data-action="all">Explore jewellery</button></div>')}
