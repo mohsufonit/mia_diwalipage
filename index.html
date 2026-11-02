@@ -1461,6 +1461,8 @@ dialog:has(.qv){padding:16px 16px 18px;max-height:94dvh}
 .qv-actions{margin-top:16px}
 .qv-note{margin-top:14px}
 }
+@media (min-width:701px){.hero-copy .hero-cta{display:flex;align-items:center;justify-content:center;width:fit-content;margin-left:auto;margin-right:auto}}
+.hero{cursor:pointer}
 </style>
 </head>
 <body>
@@ -1843,5 +1845,6 @@ alignLookPointers();
 
 }
 
+document.querySelector('.hero')?.addEventListener('click',e=>{if(e.target.closest('a,button'))return;location.href='https://www.miabytanishq.com/en_IN/collections/lightscapes'});
 </script>
 </body></html>
